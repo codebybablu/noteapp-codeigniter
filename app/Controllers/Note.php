@@ -34,15 +34,40 @@ class Note extends BaseController{
     return redirect()->to('notes');
   }
 
-  public function edit($id){
+  // public function edit($id){
    
-    $model = new NoteModel();
+  //   $model = new NoteModel();
    
-    $data['note'] = $model->find($id);
+  //   $data['note'] = $model->find($id);
     
-    return view('notes/edit', $data);
+  //   return view('notes/edit', $data);
+  // }
+
+  public function setEdit($id)
+  {
+      // Allow only this ID to be edited
+      session()->set('edit_id', $id);
+
+      return redirect()->to('notes/edit/' . $id);
   }
 
+  public function edit($id)
+  {
+      // ❌ URL tampering detected
+      if (session()->get('edit_id') != $id) {
+          return redirect()->to('/notes')
+              ->with('error', 'Invalid edit attempt!');
+      }
+
+      $model = new NoteModel();
+      $note = $model->find($id);
+
+      if (!$note) {
+          throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+      }
+
+      return view('notes/edit', ['note' => $note]);
+  }
   
   public function update($id){
     

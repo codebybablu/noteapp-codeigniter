@@ -20,8 +20,9 @@
             <td><?= esc($d['title']) ?></td>
             <td><?= esc($d['description']) ?></td>
             <td>
-            <a href="/notes/edit/<?= $d['id'] ?>">Edit</a> |
-            <a href="/notes/delete/<?= $d['id'] ?>" onclick="return confirm('Delete?')">Delete</a>
+                <a href="<?= site_url('notes/set-edit/' . $d['id']) ?>">Edit</a> |
+            
+            <a href="<?= site_url('notes/delete/' . $d['id']) ?>" onclick="return confirm('Delete?')">Delete</a>
             </td>
         </tr>
         <?php $i++; ?>
